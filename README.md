@@ -11,13 +11,13 @@ Game setipe subway surf, pepsiman, temple run.
 4. Gunakan webserver untuk tampilan terbaik. (python -m SimpleHTTPServer 8080)
 
 ## Alur Pekerjaan
-1. Buat asset:
-&nbsp;* Gedung 1
-&nbsp;* Gedung 2
-&nbsp;* Gedung 3
-&nbsp;* **Jalan Lurus**
-&nbsp;* **Obstacle**
-&nbsp;* **Player**
+1. Buat asset:<br>
+&nbsp;* Gedung 1<br>
+&nbsp;* Gedung 2<br>
+&nbsp;* Gedung 3<br>
+&nbsp;* **Jalan Lurus**<br>
+&nbsp;* **Obstacle**<br>
+&nbsp;* **Player**<br>
 2. Buat berdasar camera FPSCameraControls dengan mematikan W dan S. Laju kedepan adalah tetap sesuaikan saja biar tidak terlalu cepat.
 3. Perpindahan A dan D buat pindahnya pelan-pelan jangan langsung pindah jalur.
 3. Kalau jadi endless tiap Time = 3s (Time random lebih bagus) munculin obstacle.
