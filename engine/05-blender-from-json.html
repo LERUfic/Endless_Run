@@ -29,15 +29,23 @@
 
     // once everything is loaded, we run our Three.js stuff.
     $(function () {
-
         var stats = initStats();
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
+        var clock;
+        var bounce = 0.1;
+        var currentLane;
+        var leftLane=-10;
+        var rightLane=10;
+        var middleLane=0;
+        var rollingan = (0.008*26/0.2)/5
+        var jumping;
+        clock=new THREE.Clock();
+        clock.start();
 
         // create a camera, which defines where we're looking at.
-        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-
+        var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
         webGLRenderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
@@ -73,42 +81,28 @@
 
         var gui = new dat.GUI();
         var mesh;
+        var sphere;
 
-        var loader = new THREE.JSONLoader();
-        loader.load('../assets/models/mobil.json', function (geometry, mat) {
-            mesh = new THREE.Mesh(geometry, mat[0]);
+        document.onkeydown = handleKeyDown;
 
-            // mesh.scale.x = 250;
-            // mesh.scale.y = 250;
-            // mesh.scale.z = 700;
-            // mesh.rotation.y = 45;
-
-            // mesh.position.x = 0;
-            // mesh.position.y = -270;
-            // mesh.position.z = -00;
-
-
-            mesh.scale.x = 15;
-            mesh.scale.y = 15;
-            mesh.scale.z = 15;
-            // mesh.rotation.y = 45;
-            // 
-            mesh.position.x = 0;
-            mesh.position.y = 0;
-            mesh.position.z = 0;
-
-
-            scene.add(mesh);
-
-        }, '../assets/models');
-
-
+        addJalan();
+        addPlayer();
         render();
 
 
         function render() {
             stats.update();
 
+            sphere.rotation.x -= rollingan;
+            if(sphere.position.y<=1.8){
+                jumping=false;
+                bounce=(Math.random()*0.3)+0.005;
+            }
+
+            sphere.rotation.x -= 2;
+            sphere.position.y += bounce;
+            sphere.position.x = currentLane*0.5;
+            bounce-=0.005;
             if (mesh) {
                 mesh.rotation.z += 0.006;
             }
@@ -132,6 +126,84 @@
             $("#Stats-output").append(stats.domElement);
 
             return stats;
+        }
+
+        function addJalan(){
+            var loader = new THREE.JSONLoader();
+            loader.load('../assets/models/jalan.json', function (geometry, mat) {
+            mesh = new THREE.Mesh(geometry, mat[0]);
+
+            mesh.scale.x = 250;
+            mesh.scale.y = 250;
+            mesh.scale.z = 700;
+            mesh.rotation.y = 45;
+
+            mesh.position.x = 0;
+            mesh.position.y = -270;
+            
+
+
+            // mesh.scale.x = 15;
+            // mesh.scale.y = 15;
+            // mesh.scale.z = 15;
+            // // mesh.rotation.y = 45;
+            // // 
+            // mesh.position.x = 0;
+            // mesh.position.y = 0;
+            // mesh.position.z = 0;
+
+
+            scene.add(mesh);
+
+        }, '../assets/models');
+        }
+
+        function addPlayer(){
+            var geometry = new THREE.SphereGeometry(5, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+            var material = new THREE.MeshNormalMaterial();
+            sphere = new THREE.Mesh( geometry, material );
+            sphere.receiveShadow = true;
+            sphere.castShadow=true;
+            scene.add( sphere );
+            jumping = false;
+            sphere.position.y=0;
+            sphere.position.z=0;
+            sphere.position.x=-20;
+            currentLane=0;
+            sphere.position.x=currentLane;
+        }
+        function handleKeyDown(keyEvent){
+            //if(jumping)return;
+            console.log("masuk");
+            var validMove=true;
+            if ( keyEvent.keyCode === 37) {//left
+                if(currentLane==middleLane){
+                    currentLane=leftLane;
+                }else if(currentLane==rightLane){
+                    currentLane=middleLane;
+                }else{
+                    validMove=false;    
+                }
+            } else if ( keyEvent.keyCode === 39) {//right
+                if(currentLane==middleLane){
+                    currentLane=rightLane;
+                }else if(currentLane==leftLane){
+                    currentLane=middleLane;
+                }else{
+                    validMove=false;    
+                }
+            }else{
+                if ( keyEvent.keyCode === 38){//up, jump
+                    bounce=0.1;
+                    jumping=true;
+                }
+                validMove=false;
+            }
+            //heroSphere.position.x=currentLane;
+            if(validMove){
+                jumping=true;
+                bounce=0.06;
+            }
         }
     });
 
