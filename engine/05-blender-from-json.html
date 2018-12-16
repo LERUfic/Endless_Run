@@ -36,8 +36,8 @@
         var clock;
         var bounce = 0.1;
         var currentLane;
-        var leftLane=-10;
-        var rightLane=10;
+        var leftLane=-50;
+        var rightLane=50;
         var middleLane=0;
         var rollingan = (0.008*26/0.2)/5
         var jumping;
@@ -53,10 +53,11 @@
         webGLRenderer.shadowMapEnabled = true;
 
         // position and point the camera to the center of the scene
-        camera.position.x = -30;
-        camera.position.y = 40;
-        camera.position.z = 50;
-        camera.lookAt(new THREE.Vector3(0, 10, 0));
+        camera.position.z = 6.5;
+        camera.position.y = 4;
+        camera.position.x = 0;
+        // camera.position.z = 50;
+        camera.lookAt(new THREE.Vector3(0, -1, 0));
 
 
         // add spotlight for the shadows
@@ -94,14 +95,16 @@
             stats.update();
 
             sphere.rotation.x -= rollingan;
-            if(sphere.position.y<=1.8){
+            if(sphere.position.y<=0.3){
                 jumping=false;
-                bounce=(Math.random()*0.3)+0.005;
+                bounce=(Math.random()*0.05)+0.005;
             }
 
             sphere.rotation.x -= 2;
             sphere.position.y += bounce;
-            sphere.position.x = currentLane*0.5;
+            //sphere.position.x = currentLane * 0.052*clock.getDelta();
+            sphere.position.x = Vector3.lerp(sphere.position.x,currentLane, 2*clock.getDelta());
+            // sphere.position.z = 
             bounce-=0.005;
             if (mesh) {
                 mesh.rotation.z += 0.006;
@@ -133,19 +136,17 @@
             loader.load('../assets/models/jalan.json', function (geometry, mat) {
             mesh = new THREE.Mesh(geometry, mat[0]);
 
-            mesh.scale.x = 250;
-            mesh.scale.y = 250;
-            mesh.scale.z = 700;
-            mesh.rotation.y = 45;
-
-            mesh.position.x = 0;
-            mesh.position.y = -270;
+            // mesh.scale.x = 250;
+            // mesh.scale.y = 250;
+            // mesh.scale.z = 700;
+            mesh.rotation.x = 45;
+            mesh.rotation.y = 33;
+            mesh.scale.z = 40;
+            mesh.scale.x = 20;
+            mesh.scale.y = 20;
+            //mesh.position.z = -20;
+            mesh.position.y = -20;
             
-
-
-            // mesh.scale.x = 15;
-            // mesh.scale.y = 15;
-            // mesh.scale.z = 15;
             // // mesh.rotation.y = 45;
             // // 
             // mesh.position.x = 0;
@@ -159,22 +160,24 @@
         }
 
         function addPlayer(){
-            var geometry = new THREE.SphereGeometry(5, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+            var geometry = new THREE.SphereGeometry(1, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
             var material = new THREE.MeshNormalMaterial();
             sphere = new THREE.Mesh( geometry, material );
+            sphere.scale.x = 0.5;
+            sphere.scale.y = 0.5;
+            sphere.scale.z = 0.5;
             sphere.receiveShadow = true;
             sphere.castShadow=true;
             scene.add( sphere );
             jumping = false;
             sphere.position.y=0;
-            sphere.position.z=0;
-            sphere.position.x=-20;
+            sphere.position.z=2;
+            sphere.position.x=0;
             currentLane=0;
             sphere.position.x=currentLane;
         }
         function handleKeyDown(keyEvent){
-            //if(jumping)return;
-            console.log("masuk");
+            if(jumping)return;
             var validMove=true;
             if ( keyEvent.keyCode === 37) {//left
                 if(currentLane==middleLane){
@@ -194,12 +197,12 @@
                 }
             }else{
                 if ( keyEvent.keyCode === 38){//up, jump
-                    bounce=0.1;
+                    bounce=0.5;
                     jumping=true;
                 }
                 validMove=false;
             }
-            //heroSphere.position.x=currentLane;
+            
             if(validMove){
                 jumping=true;
                 bounce=0.06;
