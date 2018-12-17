@@ -61,7 +61,7 @@
 
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight(0xffffff);
+        var spotLight = new THREE.AmbientLight(0xffffff);
         spotLight.position.set(0    , 50, 30);
         spotLight.intensity = 4;
         scene.add(spotLight);
@@ -86,8 +86,12 @@
 
         document.onkeydown = handleKeyDown;
 
-        addJalan();
+
+
+        //addJalan();
+        addMobil();
         addPlayer();
+        //addObstacle();
         render();
 
 
@@ -103,8 +107,9 @@
             sphere.rotation.x -= 2;
             sphere.position.y += bounce;
             //sphere.position.x = currentLane * 0.052*clock.getDelta();
-            sphere.position.x = Vector3.lerp(sphere.position.x,currentLane, 2*clock.getDelta());
+            //sphere.position.x = Vector3.lerp(sphere.position.x,currentLane, 2*clock.getDelta());
             // sphere.position.z = 
+            sphere.position.x = currentLane * 0.052;
             bounce-=0.005;
             if (mesh) {
                 mesh.rotation.z += 0.006;
@@ -159,10 +164,36 @@
         }, '../assets/models');
         }
 
+    
+
+        function addMobil(){
+            var loader = new THREE.JSONLoader();
+            loader.load('../assets/models/Car.json', function (geometry, mat) {
+            meshmobil = new THREE.Mesh(geometry, mat[5]);
+
+            meshmobil.scale.x = 0.5;
+            meshmobil.scale.y = 0.5;
+            meshmobil.scale.z = 0.5;
+            //mesh.rotation.x = 45;
+            //mesh.rotation.y = 33;
+            //mesh.scale.z = 40;
+            //mesh.scale.x = 20;
+            //mesh.scale.y = 20;
+            meshmobil.position.x = 0;
+            meshmobil.position.z = 2;
+            meshmobil.position.y = 0;
+            
+   
+
+            scene.add(meshmobil);
+
+        }, '../assets/models');
+        }
+
         function addPlayer(){
-            var geometry = new THREE.SphereGeometry(1, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+            var geometry1 = new THREE.SphereGeometry(1, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
             var material = new THREE.MeshNormalMaterial();
-            sphere = new THREE.Mesh( geometry, material );
+            sphere = new THREE.Mesh( geometry1, material );
             sphere.scale.x = 0.5;
             sphere.scale.y = 0.5;
             sphere.scale.z = 0.5;
@@ -197,7 +228,7 @@
                 }
             }else{
                 if ( keyEvent.keyCode === 38){//up, jump
-                    bounce=0.5;
+                    bounce=0.1;
                     jumping=true;
                 }
                 validMove=false;
