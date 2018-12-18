@@ -86,6 +86,7 @@
         var mesh;
         var sphere;
         var meshmobil;
+        var arraymobil = [];
 
 
         document.onkeydown = handleKeyDown;
@@ -120,8 +121,10 @@
                 mesh.rotation.z += 0.006;
             }
             if(meshmobil){
-                meshmobil.position.y -=0.01;
-                meshmobil.position.z +=0.04;
+                for (var i = 0; i < 5; i++) {
+                    arraymobil[i].position.y -=0.01;
+                    arraymobil[i].position.z +=0.04;
+                }
             }
 
 
@@ -177,27 +180,37 @@
 
         function createMobil(){
             var loader = new THREE.JSONLoader();
+            var pos = 5, neg = -5
             loader.load('../assets/models/Car.json', function (geometry, mat) {
 
             //var material = new THREE.MeshNormalMaterial();
             for (var i = 0; i < 5; i++) {
                 meshmobil = new THREE.Mesh(geometry, mat);
-                meshmobil.position.x = Math.floor(Math.random()*i)+0;
+                meshmobil.position.x = Math.floor(Math.random()*(pos-neg+1)) + neg;
                 meshmobil.position.z = 2;
                 meshmobil.position.y = 0;
+
+                meshmobil.scale.x = 0.5;
+                meshmobil.scale.y = 0.5;
+                meshmobil.scale.z = 0.5;
                 
+                meshmobil.rotation.y = 3.15;
+
+                arraymobil[i] = meshmobil
+
+                scene.add(arraymobil[i]);
             }
             console.log(mat[1])
 
-            meshmobil.scale.x = 0.5;
+            /*meshmobil.scale.x = 0.5;
             meshmobil.scale.y = 0.5;
-            meshmobil.scale.z = 0.5;
+            meshmobil.scale.z = 0.5;*/
 
             
-            meshmobil.rotation.y = 3.15;
+            //meshmobil.rotation.y = 3.15;
             //meshmobil.rotation.x = 90;
 
-            scene.add(meshmobil);
+            //scene.add(meshmobil);
 
             }, '../assets/models');
         }
