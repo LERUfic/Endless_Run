@@ -97,6 +97,7 @@
         //var carsPool=[];
         //var carsinPath=[];
 
+        //FUNGSI GENERATE
         addJalan();
         createMobil();
         addPlayer();
@@ -132,7 +133,7 @@
             
             if(meshmobil){
                 for (var i = 0; i < 3; i++) {
-                    arraymobil[i].position.y -=0.005;
+                    arraymobil[i].position.y -=0.002;
                     arraymobil[i].position.z +=0.1;
                 }
             }
@@ -183,7 +184,7 @@
 
             scene.add(mesh);
 
-            }, '../assets/models');
+            });
         }
 
     
@@ -213,6 +214,11 @@
         function generateMobil(){
             var loader = new THREE.JSONLoader();
             var max = 2, min = 0;
+            if(meshmobil){
+                for (var i = 0; i < 3; i++) {
+                    scene.remove(arraymobil[i]);
+                }
+            }
             loader.load('../assets/models/Car.json', function (geometry, mat) {
                 for (var i = 0; i < 3; i++) {
                     meshmobil = new THREE.Mesh(geometry, mat);
@@ -221,10 +227,10 @@
                         meshmobil.position.x =0;
                     }
                     else if(temp==1){
-                        meshmobil.position.x = -2.5;
+                        meshmobil.position.x = -3;
                     }
                     else{
-                        meshmobil.position.x = 2.5;
+                        meshmobil.position.x = 3;
                     }
                     console.log(Math.floor(Math.random()*(max-min+1)) + min);
                     meshmobil.position.y = 0;
@@ -239,7 +245,7 @@
                     arraymobil[i] = meshmobil;
                     scene.add(arraymobil[i]);
                 }
-            }, '../assets/models');
+            });
         }
 
         function addPlayer(){
@@ -260,7 +266,7 @@
 
                 currentLane=0;
                 sphere.position.x=currentLane;
-            }, '../assets/models');
+            });
         }
 
         function handleKeyDown(keyEvent){
@@ -300,41 +306,6 @@
 
         }
 
-        /*function createCarPool(){
-            var maxCarInPool=10;
-            var newCar;
-            for(var i=0; i<maxCarInPool;i++){
-                newCar=createTree();
-                    carsPool.push(newCar);
-                }
-            }
-         
-        function addPathCar() {
-            var options=[0,1,2];
-            var lane = Math.floor(Math.random()*3);
-            addMobil(true, lane);
-            options.splice(lane,1);
-            if (Math.random()>0.5) {
-                lane = Math.floor(Math.random()*2);
-                addMobil(true,options[lane]);
-            } 
-        }
-
-        function addMobil(inPath, row, isLeft){
-            var newCar;
-            if (inPath) {
-                if (carsPool.length==0) return;
-                newCar=carsPool.pop();
-                newCar.visible=true;
-                carsinPath.push(newCar);
-                //sphericalHelper.set( worldRadius-0.3, pathAngleValues[row], -rollingGroundSphere.rotation.x+4 );
-            }else{
-                newCar=createMobil();
-                //sphericalHelper.set( worldRadius-0.3, forestAreaAngle, row );
-            }
-            newCar.position.setFromSpherical(sphericalHelper);
-            var 
-        }*/
 
 
     });
