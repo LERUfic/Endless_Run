@@ -100,22 +100,23 @@
         addJalan();
         createMobil();
         addPlayer();
-        //addObstacle();
         render();
 
 
         function render() {
             stats.update();
 
-            sphere.rotation.x -= rollingan;
-            if(sphere.position.y<=0.3){
-                jumping=false;
-                bounce=(Math.random()*0.05)+0.005;
+            if(sphere){
+                sphere.rotation.x -= rollingan;
+                if(sphere.position.y<=1){
+                    jumping=false;
+                    bounce=(Math.random()*0.05)+0.005;
+                }
+
+                sphere.position.y += bounce;
+                sphere.position.x = THREE.Math.lerp(sphere.position.x,currentLane, 2*clock.getDelta());
             }
 
-            sphere.rotation.x -= 2;
-            sphere.position.y += bounce;
-            sphere.position.x = THREE.Math.lerp(sphere.position.x,currentLane, 2*clock.getDelta());
             if(clock.getElapsedTime()>0.5){
                 clock.start();
                 // addPathTree();
@@ -124,13 +125,11 @@
                 //     scoreText.innerHTML=score.toString();
                 // }
             }
-            //sphere.position.x = currentLane * 0.052*clock.getDelta();
-            // sphere.position.z = 
-            //sphere.position.x = currentLane * 0.052;
-            bounce-=0.005;
+            bounce-=0.006;
             if (mesh) {
                 mesh.rotation.z += 0.006;
             }
+            
             if(meshmobil){
                 for (var i = 0; i < 3; i++) {
                     arraymobil[i].position.y -=0.005;
@@ -215,13 +214,13 @@
                 meshmobil.scale.y = 0.5;
                 meshmobil.scale.z = 0.5;
                 
-                meshmobil.rotation.y = 3.15;
+                //meshmobil.rotation.y = 3.15;
 
                 arraymobil[i] = meshmobil
 
                 scene.add(arraymobil[i]);
             }
-            console.log(mat[1])
+            console.log(mat[1]);
 
             /*meshmobil.scale.x = 0.5;
             meshmobil.scale.y = 0.5;
@@ -237,22 +236,26 @@
         }
 
         function addPlayer(){
-            var geometry1 = new THREE.SphereGeometry(1, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
-            var material = new THREE.MeshNormalMaterial();
-            sphere = new THREE.Mesh( geometry1, material );
-            sphere.scale.x = 0.5;
-            sphere.scale.y = 0.5;
-            sphere.scale.z = 0.5;
-            sphere.receiveShadow = true;
-            sphere.castShadow=true;
-            scene.add( sphere );
-            jumping = false;
-            sphere.position.y=0;
-            sphere.position.z=2;
-            sphere.position.x=0;
-            currentLane=0;
-            sphere.position.x=currentLane;
+            var loader = new THREE.JSONLoader();
+            loader.load('../assets/models/wheel2.json', function (geometry, material) {
+                sphere = new THREE.Mesh(geometry, material);
+                sphere.scale.x = 0.3;
+                sphere.scale.y = 0.3;
+                sphere.scale.z = 0.3;
+                sphere.rotation.y=1.6;
+                sphere.receiveShadow = true;
+                sphere.castShadow=true;
+                sphere.position.y=0;
+                sphere.position.z=4.3;
+                sphere.position.x=0;
+                scene.add( sphere );
+                jumping = false;
+
+                currentLane=0;
+                sphere.position.x=currentLane;
+            }, '../assets/models');
         }
+
         function handleKeyDown(keyEvent){
             if(jumping)return;
             var validMove=true;
@@ -273,10 +276,10 @@
                     validMove=false;    
                 }
             }else{
-                // if ( keyEvent.keyCode === 38){//up, jump
-                //     bounce=0.15;
-                //     jumping=true;
-                // }
+                if ( keyEvent.keyCode === 38){//up, jump
+                    bounce=0.15;
+                    jumping=true;
+                }
                 validMove=false;
             }
             
