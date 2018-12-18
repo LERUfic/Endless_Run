@@ -9,7 +9,6 @@
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
-    <script type="text/javascript" src="../libs/tween.min.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -107,7 +106,7 @@
         function render() {
             stats.update();
 
-            if(sphere){
+            if(sphere && meshmobil && mesh){
                 sphere.rotation.x -= rollingan;
                 if(sphere.position.y<=1){
                     jumping=false;
@@ -116,31 +115,64 @@
 
                 sphere.position.y += bounce;
                 sphere.position.x = THREE.Math.lerp(sphere.position.x,currentLane, 2*clock.getDelta());
-            }
 
-            if(clock.getElapsedTime()>0.5){
-                clock.start();
-                checkCollide();
-                if(isTabrak){
-                    $('#scores').html("");
-                    $('#WebGL-output').html("<center><h1>SCORES ANDA:<br />"+ score +"</h1></center>");
+                if(clock.getElapsedTime()>0.5){
+                    clock.start();
+                    checkCollide();
+                    if(isTabrak){
+                        $('#scores').html("");
+                        $('#WebGL-output').html("<center><h1>SCORES ANDA:<br />"+ score +"</h1></center>");
+                    }
+                    else{
+                        score+=2*0.5;
+                        $('#scores').html("<center><h3>SCORES: "+score+"</h3></center>");
+                    }
                 }
-                else{
-                    score+=2*0.5;
-                    $('#scores').html("<center><h3>SCORES: "+score+"</h3></center>");
-                }
-            }
-            bounce-=0.006;
-            if (mesh) {
+                bounce-=0.006;
+
                 mesh.rotation.z += 0.006;
-            }
-            
-            if(meshmobil){
+
                 for (var i = 0; i < 3; i++) {
                     arraymobil[i].position.y -=0.002;
                     arraymobil[i].position.z +=0.1;
                 }
             }
+
+
+            // if(sphere){
+            //     sphere.rotation.x -= rollingan;
+            //     if(sphere.position.y<=1){
+            //         jumping=false;
+            //         bounce=(Math.random()*0.05)+0.005;
+            //     }
+
+            //     sphere.position.y += bounce;
+            //     sphere.position.x = THREE.Math.lerp(sphere.position.x,currentLane, 2*clock.getDelta());
+            // }
+
+            // if(clock.getElapsedTime()>0.5){
+            //     clock.start();
+            //     checkCollide();
+            //     if(isTabrak){
+            //         $('#scores').html("");
+            //         $('#WebGL-output').html("<center><h1>SCORES ANDA:<br />"+ score +"</h1></center>");
+            //     }
+            //     else{
+            //         score+=2*0.5;
+            //         $('#scores').html("<center><h3>SCORES: "+score+"</h3></center>");
+            //     }
+            // }
+            // bounce-=0.006;
+            // if (mesh) {
+            //     mesh.rotation.z += 0.006;
+            // }
+            
+            // if(meshmobil){
+            //     for (var i = 0; i < 3; i++) {
+            //         arraymobil[i].position.y -=0.002;
+            //         arraymobil[i].position.z +=0.1;
+            //     }
+            // }
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
