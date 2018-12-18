@@ -191,10 +191,9 @@
         function createMobil(){
             
 
-            //var material = new THREE.MeshNormalMaterial();
+          //var material = new THREE.MeshNormalMaterial();
                 generateMobil();
                 setInterval(generateMobil,2000);  
-            
             
 
             /*meshmobil.scale.x = 0.5;
@@ -296,46 +295,33 @@
             }
         }
 
-        function addMobil(){
-
-        }
-
-        /*function createCarPool(){
-            var maxCarInPool=10;
-            var newCar;
-            for(var i=0; i<maxCarInPool;i++){
-                newCar=createTree();
-                    carsPool.push(newCar);
+        function doTreeLogic(){
+            var oneTree;
+            var treePos = new THREE.Vector3();
+            var treesToRemove=[];
+            arraymobil.forEach( function ( element, index ) {
+                oneTree=arraymobil[ index ];
+                treePos.setFromMatrixPosition( oneTree.matrixWorld );
+                if(treePos.z>6 &&oneTree.visible){//gone out of our view zone
+                    treesToRemove.push(oneTree);
+                }else{//check collision
+                    if(treePos.distanceTo(heroSphere.position)<=0.6){
+                        console.log("hit");
+                        hasCollided=true;
+                        explode();
+                    }
                 }
-            }
-         
-        function addPathCar() {
-            var options=[0,1,2];
-            var lane = Math.floor(Math.random()*3);
-            addMobil(true, lane);
-            options.splice(lane,1);
-            if (Math.random()>0.5) {
-                lane = Math.floor(Math.random()*2);
-                addMobil(true,options[lane]);
-            } 
+            });
+            var fromWhere;
+            treesToRemove.forEach( function ( element, index ) {
+                oneTree=treesToRemove[ index ];
+                fromWhere=arraymobil.indexOf(oneTree);
+                arraymobil.splice(fromWhere,1);
+                treesPool.push(oneTree);
+                oneTree.visible=false;
+                console.log("remove tree");
+            });
         }
-
-        function addMobil(inPath, row, isLeft){
-            var newCar;
-            if (inPath) {
-                if (carsPool.length==0) return;
-                newCar=carsPool.pop();
-                newCar.visible=true;
-                carsinPath.push(newCar);
-                //sphericalHelper.set( worldRadius-0.3, pathAngleValues[row], -rollingGroundSphere.rotation.x+4 );
-            }else{
-                newCar=createMobil();
-                //sphericalHelper.set( worldRadius-0.3, forestAreaAngle, row );
-            }
-            newCar.position.setFromSpherical(sphericalHelper);
-            var 
-        }*/
-
 
     });
 
