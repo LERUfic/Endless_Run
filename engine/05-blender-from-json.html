@@ -87,6 +87,7 @@
         var sphere;
         var meshmobil;
         var arraymobil = [];
+        var lanemobil;
 
 
         document.onkeydown = handleKeyDown;
@@ -121,9 +122,9 @@
                 mesh.rotation.z += 0.006;
             }
             if(meshmobil){
-                for (var i = 0; i < 5; i++) {
-                    arraymobil[i].position.y -=0.01;
-                    arraymobil[i].position.z +=0.04;
+                for (var i = 0; i < 3; i++) {
+                    arraymobil[i].position.y -=0.005;
+                    arraymobil[i].position.z +=0.1;
                 }
             }
 
@@ -180,15 +181,25 @@
 
         function createMobil(){
             var loader = new THREE.JSONLoader();
-            var pos = 5, neg = -5
+            var max = 2, min = 0
             loader.load('../assets/models/Car.json', function (geometry, mat) {
 
             //var material = new THREE.MeshNormalMaterial();
             for (var i = 0; i < 5; i++) {
                 meshmobil = new THREE.Mesh(geometry, mat);
-                meshmobil.position.x = Math.floor(Math.random()*(pos-neg+1)) + neg;
-                meshmobil.position.z = 2;
+                var temp = Math.floor(Math.random()*(max-min+1)) + min;
+                if (temp==0) {
+                    meshmobil.position.x =0;
+                }
+                else if(temp==1){
+                    meshmobil.position.x = -2.5;
+                }
+                else{
+                    meshmobil.position.x = 2.5;
+                }
+                console.log(Math.floor(Math.random()*(max-min+1)) + min);
                 meshmobil.position.y = 0;
+                meshmobil.position.z = -3;
 
                 meshmobil.scale.x = 0.5;
                 meshmobil.scale.y = 0.5;
