@@ -45,6 +45,7 @@
         var rollingan = (0.008*26/0.2)/5
         var jumping;
         var tween;
+        var isTabrak = false;
         clock=new THREE.Clock();
         clock.start();
 
@@ -120,7 +121,10 @@
 
             if(clock.getElapsedTime()>0.5){
                 clock.start();
-                // addPathTree();
+                checkCollide();
+                if(isTabrak){
+                    //console.log("sudah");
+                }
                 // if(!hasCollided){
                 //     score+=2*treeReleaseInterval;
                 //     scoreText.innerHTML=score.toString();
@@ -231,7 +235,6 @@
                     else{
                         meshmobil.position.x = 3;
                     }
-                    console.log(Math.floor(Math.random()*(max-min+1)) + min);
                     meshmobil.position.y = 0;
                     meshmobil.position.z = -3;
 
@@ -245,6 +248,18 @@
                     scene.add(arraymobil[i]);
                 }
             });
+        }
+
+        function checkCollide(){
+            var mobilSatu = new THREE.Vector3();
+            for (var i = 0; i < 3; i++) {
+                mobilSatu.setFromMatrixPosition( arraymobil[i].matrixWorld );
+                
+                if(mobilSatu.distanceTo(sphere.position)<=2){
+                    console.log("BOOM");
+                    isTabrak = true;
+                }
+            }
         }
 
         function addPlayer(){
