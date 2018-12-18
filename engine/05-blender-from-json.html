@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <script type="text/javascript" src="../libs/tween.min.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -38,11 +39,12 @@
         var clock;
         var bounce = 0.1;
         var currentLane;
-        var leftLane=-50;
-        var rightLane=50;
+        var leftLane=-2.7;
+        var rightLane=2.7;
         var middleLane=0;
         var rollingan = (0.008*26/0.2)/5
         var jumping;
+        var tween;
         clock=new THREE.Clock();
         clock.start();
 
@@ -87,6 +89,7 @@
         var sphere;
         var meshmobil;
         var arraymobil = [];
+        var lanemobil;
 
 
         document.onkeydown = handleKeyDown;
@@ -112,18 +115,26 @@
 
             sphere.rotation.x -= 2;
             sphere.position.y += bounce;
-            //sphere.position.x = currentLane * 0.052*clock.getDelta();
             sphere.position.x = THREE.Math.lerp(sphere.position.x,currentLane, 2*clock.getDelta());
+            if(clock.getElapsedTime()>0.5){
+                clock.start();
+                // addPathTree();
+                // if(!hasCollided){
+                //     score+=2*treeReleaseInterval;
+                //     scoreText.innerHTML=score.toString();
+                // }
+            }
+            //sphere.position.x = currentLane * 0.052*clock.getDelta();
             // sphere.position.z = 
-            sphere.position.x = currentLane * 0.052;
+            //sphere.position.x = currentLane * 0.052;
             bounce-=0.005;
             if (mesh) {
                 mesh.rotation.z += 0.006;
             }
             if(meshmobil){
-                for (var i = 0; i < 5; i++) {
-                    arraymobil[i].position.y -=0.01;
-                    arraymobil[i].position.z +=0.04;
+                for (var i = 0; i < 3; i++) {
+                    arraymobil[i].position.y -=0.005;
+                    arraymobil[i].position.z +=0.1;
                 }
             }
 
@@ -180,15 +191,25 @@
 
         function createMobil(){
             var loader = new THREE.JSONLoader();
-            var pos = 5, neg = -5
+            var max = 2, min = 0;
             loader.load('../assets/models/Car.json', function (geometry, mat) {
 
             //var material = new THREE.MeshNormalMaterial();
             for (var i = 0; i < 5; i++) {
                 meshmobil = new THREE.Mesh(geometry, mat);
-                meshmobil.position.x = Math.floor(Math.random()*(pos-neg+1)) + neg;
-                meshmobil.position.z = 2;
+                var temp = Math.floor(Math.random()*(max-min+1)) + min;
+                if (temp==0) {
+                    meshmobil.position.x =0;
+                }
+                else if(temp==1){
+                    meshmobil.position.x = -2.5;
+                }
+                else{
+                    meshmobil.position.x = 2.5;
+                }
+                console.log(Math.floor(Math.random()*(max-min+1)) + min);
                 meshmobil.position.y = 0;
+                meshmobil.position.z = -3;
 
                 meshmobil.scale.x = 0.5;
                 meshmobil.scale.y = 0.5;
@@ -252,10 +273,10 @@
                     validMove=false;    
                 }
             }else{
-                if ( keyEvent.keyCode === 38){//up, jump
-                    bounce=0.15;
-                    jumping=true;
-                }
+                // if ( keyEvent.keyCode === 38){//up, jump
+                //     bounce=0.15;
+                //     jumping=true;
+                // }
                 validMove=false;
             }
             
