@@ -47,6 +47,7 @@
         var tween;
         var isTabrak = false;
         var score=0;
+        var life= 3;
         clock=new THREE.Clock();
         clock.start();
 
@@ -219,9 +220,12 @@
             var mobilSatu = new THREE.Vector3();
             for (var i = 0; i < 3; i++) {
                 mobilSatu.setFromMatrixPosition( arraymobil[i].matrixWorld );
-                
+
                 if(mobilSatu.distanceTo(sphere.position)<=2){
-                    isTabrak = true;
+                    life --;
+                    if(life ==0){
+                        isTabrak = true;
+                    }
                 }
             }
         }
