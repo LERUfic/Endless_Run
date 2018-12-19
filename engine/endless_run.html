@@ -20,6 +20,8 @@
 <body style="background-color:lightblue">
 <div id="scores" style="color:black;">
 </div>
+<div id="lifes" style="color:black;">
+</div>
 <div id="Stats-output">
 </div>
 <!-- Div which will hold the Output -->
@@ -122,11 +124,13 @@
                     checkCollide();
                     if(isTabrak){
                         $('#scores').html("");
+                        $('#lifes').html("");
                         $('#WebGL-output').html("<center><h1>SCORES ANDA:<br />"+ score +"</h1></center>");
                     }
                     else{
                         score+=2*0.5;
                         $('#scores').html("<center><h3>SCORES: "+score+"</h3></center>");
+                        $('#lifes').html("<bottom><h1>Life : "+life+"</h1></bottom>");
                     }
                 }
                 bounce-=0.006;
