@@ -94,6 +94,7 @@
         var lanemobil;
 
 
+
         document.onkeydown = handleKeyDown;
 
         //FUNGSI GENERATE
@@ -117,6 +118,7 @@
                 sphere.position.x = THREE.Math.lerp(sphere.position.x,currentLane, 2*clock.getDelta());
 
                 if(clock.getElapsedTime()>0.5){
+                    console.log(clock.getElapsedTime());
                     clock.start();
                     checkCollide();
                     if(isTabrak){
@@ -124,7 +126,7 @@
                         $('#WebGL-output').html("<center><h1>SCORES ANDA:<br />"+ score +"</h1></center>");
                     }
                     else{
-                        score+=2*0.5;
+                        score+=1;
                         $('#scores').html("<center><h3>SCORES: "+score+"</h3></center>");
                     }
                 }
